@@ -13,7 +13,7 @@ Signup / login API built with Node.js, Express 5, `jsonwebtoken`, bcrypt and Pos
 - `POST /auth/refresh`: exchanges a refresh token for a new pair (rotation)
 - `POST /auth/logout`: revokes the session of a refresh token
 - Tables are created on startup if they don't exist
-- 34 tests (Node test runner + supertest) against an in-memory Postgres (`pg-mem`), so no database is needed to run them
+- 36 tests (Node test runner + supertest) against an in-memory Postgres (`pg-mem`), so no database is needed to run them
 
 ## Security choices
 
@@ -45,6 +45,7 @@ All bodies are JSON. Errors look like `{ "error": "message" }`, and validation e
 | GET | `/auth/me` | header `Authorization: Bearer <accessToken>` | `200 { user }` | 401 |
 | POST | `/auth/refresh` | `{ refreshToken }` | `200` new token pair | 400, 401 |
 | POST | `/auth/logout` | `{ refreshToken }` | `204` | 400 |
+| GET | `/` | none | `200 { name, status, repository, endpoints: [{ method, path, authRequired }] }` | none |
 | GET | `/health` | none | `200 { status: "ok" }` | none |
 
 Example:
@@ -95,7 +96,7 @@ src/
   config.js            environment validation
   db/                  pool, schema bootstrap, user and refresh-token queries
   middleware/          authenticate (JWT), rate limiter, error handler
-  routes/auth.js       /auth endpoints
+  routes/              /auth endpoints, GET / API description
   services/            bcrypt, JWT/refresh token helpers, session rotation
   utils/               input validation, HttpError
 tests/                 auth flow and config/startup tests

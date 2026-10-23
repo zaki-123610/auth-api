@@ -42,6 +42,32 @@ async function registeredUser() {
   return { email, user: res.body.user };
 }
 
+describe('GET /', () => {
+  it('describes the API, its endpoints and the repository', async () => {
+    const res = await request(app).get('/');
+
+    assert.equal(res.status, 200);
+    assert.equal(res.body.name, 'Auth API');
+    assert.equal(res.body.status, 'ok');
+    assert.equal(res.body.repository, 'https://github.com/zaki-123610/auth-api');
+    assert.deepEqual(
+      res.body.endpoints.filter((endpoint) => endpoint.authRequired),
+      [{ method: 'GET', path: '/auth/me', authRequired: true }],
+    );
+    assert.ok(res.body.endpoints.every((e) => typeof e.method === 'string' && typeof e.path === 'string'));
+  });
+
+  it('only lists endpoints that exist, with accurate auth requirements', async () => {
+    const { endpoints } = (await request(app).get('/')).body;
+
+    for (const { method, path, authRequired } of endpoints) {
+      const res = await request(app)[method.toLowerCase()](path);
+      assert.notEqual(res.status, 404, `${method} ${path}`);
+      assert.equal(res.status === 401, authRequired, `${method} ${path} returned ${res.status}`);
+    }
+  });
+});
+
 describe('POST /auth/signup', () => {
   it('creates a user, stores a lowercase email and a bcrypt hash, never returns the hash', async () => {
     const res = await signup('  Alice@Example.COM ');

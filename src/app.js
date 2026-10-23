@@ -2,6 +2,7 @@ import express from 'express';
 import helmet from 'helmet';
 import { errorHandler, notFound } from './middleware/errorHandler.js';
 import { createAuthRouter } from './routes/auth.js';
+import { getApiInfo } from './routes/root.js';
 
 export function createApp({ db, config }) {
   const app = express();
@@ -10,6 +11,7 @@ export function createApp({ db, config }) {
   app.use(helmet());
   app.use(express.json({ limit: config.jsonBodyLimit }));
 
+  app.get('/', getApiInfo);
   app.get('/health', (req, res) => {
     res.json({ status: 'ok' });
   });
