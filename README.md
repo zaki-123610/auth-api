@@ -2,8 +2,9 @@
 
 Signup / login API built with Node.js, Express 5, `jsonwebtoken`, bcrypt and PostgreSQL (Neon), using raw parameterized SQL through `pg`.
 
-**Live:** `https://<your-service>.onrender.com` _(placeholder: replace after deploying)_
+**Live API:** https://auth-api-eg3h.onrender.com
 
+> Hosted on Render's free tier: the first request may take up to a minute while the server wakes up.
 ## Features
 
 - `POST /auth/signup`: validated email + password, bcrypt (cost 12) hash, email stored lowercase and unique
